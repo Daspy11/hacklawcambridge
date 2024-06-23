@@ -2,7 +2,10 @@ import json
 import boto3  # pip install boto3
 import os
 import docx  # pip install python-docx
+import re
 # pip install pandas
+from io import StringIO
+from contextlib import redirect_stdout
 
 # what even is security
 os.environ["AWS_DEFAULT_REGION"] = "us-west-2"
@@ -26,7 +29,7 @@ def get_conditions(doc_path):
     doctext = read_file(doc_path)
     prompt = """
     You are a tool for extracting conditions from legal contract. You are given the text of the contract and need to return the list of all clauses that need to be enforced, structured as a JSON file.
-    You are specifically extracting the following items: delivery date, delivery amount, payment date, commencement date, delivery product.
+    You are specifically extracting the following items: delivery date, delivery amount, amount, goods, payment date, commencement date, delivery product, recycled content, max CO2 exhausts, supplier name.
     Each extracted condition should be an entry in a json dictionary.
     """
     input_text = f'Human: {prompt}\nFile contents:\n{doctext}\n\nAnswer in JSON format.\nAssistant: {{ '
@@ -48,7 +51,6 @@ def get_conditions(doc_path):
         response.get('body').read())  # read the response
 
     output_text = response_body['generation']
-    print(f"{output_text=}")
     # Does it load?
     try:
         parsed_response = json.loads('{' + output_text)
@@ -56,15 +58,16 @@ def get_conditions(doc_path):
         raise ValueError(
             f"LLM returned an invalid JSON. On the real product we would implement validation and retries. {e}"
         )
+    #print(json.dumps(parsed_response, indent=4))
     return parsed_response
 
 
 def test_condition(condition):
-    # Below description can be automatically generated for databases, but here we keep it simple.
-    prompt = """
+    # Below description can be automatically generated for databases, but here we keep it simple for the demo.
+    prompt = f"""
     You are a code-generating tool for verifying whether a codition holds in a database. 
-    You are given the table of company transactions called 'transactions.csv' which contains columns transaction_date, transaction_amount and transaction_reason. 
-    You are given the table of company deliveries called 'deliveries.csv' which contains columns delivery_date, delivery_amount and delivery_content. 
+    You are given the table of company transactions called 'transactions.csv' which contains columns transaction_date, transaction_amount, supplier. 
+    You are given the table of company deliveries called 'deliveries.csv' which contains columns delivery_date, delivery_amount, supplier, co2_exhausts, delivery_content. 
     Given the data in the database, you are trying to verify whether the condition "{condition}" is true or false. 
     Return a Python program that checks whether the condition {condition} is correct or not. The program should write the result into variable "result". 
     The value of result should be 1 if the condition is correct, 0 if it is incorrect, and 2 if the answer cannot be determined. 
@@ -92,14 +95,18 @@ def test_condition(condition):
         response.get('body').read())  # read the response
     output_text = response_body['generation']
     actual_program = program_prefix + output_text
-    print(f'Generated code:\n{actual_program}')
     # the moment of truth: execution
+    result = 2
     try:
-        exec(actual_program)
+        f = StringIO()
+        with redirect_stdout(f):
+            exec(actual_program)
+        s = f.getvalue()
+        result = int(re.findall("\d+", s)[0])
     except Exception as e:
         print(f"exception {e}")
         result = 2
-    if result == "1":
+    if result == 1:
         return "Green"
     elif result == 0:
         return "Red"
@@ -111,5 +118,5 @@ if __name__ == "__main__":
     path = 'contract.docx'
     conditions = get_conditions(path)
     for condition, field in conditions.items():
-        result = test_condition(condition + ": " + field)
-        print(f'Condition: {condition}: {field}\nresult')
+        result = test_condition(str(condition) + ": " + str(field))
+        print(f'Condition: {condition}: {field}\n{result}')
