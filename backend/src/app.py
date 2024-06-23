@@ -1,10 +1,11 @@
-from flask import Flask
+from flask import Flask, request
 from flask_migrate import Migrate
 
 from src import routes, utils as u
 from src.models import db
 from src.settings import Settings as S
 from src.tasks import make_celery
+from src.rest_api import process_file
 
 
 class Application:
@@ -45,3 +46,7 @@ class Application:
         @self.flask_app.route('/')
         def home(key):
             return 'home'
+
+        @self.flask_app.route('/process-file/', methods=['POST'])
+        def process_file_route():
+            return process_file(request)

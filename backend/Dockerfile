@@ -36,7 +36,13 @@ USER app
 ADD pyproject.toml poetry.lock ./
 RUN poetry install
 
-# Add the project
+
+# Install
+RUN pip install aiofiles
+RUN pip install boto3
+RUN pip install python-docx
+RUN pip install pandas
+
 # NOTE Run the install again to install the project
 ADD src ./src
 ADD migrations ./migrations
