@@ -1,3 +1,25 @@
+# Running this app
+
+This app is built with FastAPI on the backend, and React + ShadCN on the frontend.
+
+### 1. Install all dependencies
+1.1. Install Node.js & Python if you haven't already
+1.2. Install Vite `npm i -g vite`
+1.3. Install required python package with `pip install -r requirements.txt`
+1.4. Install required React packages with `cd frontend2` and then `npm run install`
+
+
+### 2. Run chrome with CORS enabled
+**Windows**
+`"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security`
+
+**macOS**
+`open -na "Google Chrome" --args --disable-web-security`
+
+**Linux**
+`google-chrome --disable-web-security`
+
+
 # The React + Flask Template &middot; [![Version Badge](https://img.shields.io/badge/version-1.0.0-brightgreen)](#)
 
 A React starter project with Flask backend that works with [Docker](https://www.docker.com), [Docker Compose](https://docs.docker.com/compose),
