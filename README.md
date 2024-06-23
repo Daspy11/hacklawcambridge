@@ -13,8 +13,8 @@ The frontend code can be found in the `frontend2` folder. **Please disregard fro
 ## Includes
 
 - [React](https://github.com/facebook/react) - JavaScript library for building user interfaces
-- [Flask](https://github.com/pallets/flask) - lightweight WSGI web application framework
-- [ShadCN](https://ui.shadcn.com) - component library
+- [Flask](https://github.com/pallets/flask) - Lightweight Python WSGI web application framework
+- [ShadCN](https://ui.shadcn.com) - Component library
 - [Pandas](https://pandas.pydata.org/) - Library for manipulating tabular data
 
 ## Dependencies
@@ -24,7 +24,29 @@ The frontend code can be found in the `frontend2` folder. **Please disregard fro
 
 ## Getting Started
 
-- Install dependencies
-- Run `make develop` at the root of this project.
-- Visit the app at http://localhost:5173.
-- Visit http://localhost:8080/api/v1/files to list objects in LocalStack s3 bucket.
+### 1. Install all dependencies
+1.1. Install Node.js & Python if you haven't already
+1.2. Install Vite `npm i -g vite`
+1.3. Install required python package with `pip install -r requirements.txt`
+1.4. Install required React packages with `cd frontend2` and then `npm run install`
+
+
+### 2. Run chrome with CORS enabled
+Our app bridges requests from different ports when running, so its necessary to first start a browser instance without CORS protections while working in development. In production, Docker makes this unnecessary.
+
+**Windows**
+`"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security`
+
+**macOS**
+`open -na "Google Chrome" --args --disable-web-security`
+
+**Linux**
+`google-chrome --disable-web-security`
+
+
+### 3. Start the app
+
+3.1. Navigate into the frontend2 folder, and then run `vite`
+3.2. In the root directory in a separate terminal, run `make develop`
+
+The frontend will be available at localhost:5173
