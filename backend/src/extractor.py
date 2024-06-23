@@ -107,17 +107,28 @@ def test_condition(condition):
         print(f"exception {e}")
         result = 2
     if result == 1:
-        return "Green"
+        return "Green", actual_program
     elif result == 0:
-        return "Red"
+        return "Red", actual_program
     else:
-        return "Could not determine"
+        return "Could not determine", actual_program
+
+
+def test_a_doc(path):
+    conditions = get_conditions(path)
+    outcome = {}
+    for field, condition in conditions.items():
+        result, program = test_condition(str(field) + ": " + str(condition))
+        outcome[str(field)] = {
+            "condition": str(condition),
+            "result": result,
+            "program": program,
+        }
+    return outcome
 
 
 if __name__ == "__main__":
     # For testing purposes
     path = 'contract.docx'
-    conditions = get_conditions(path)
-    for condition, field in conditions.items():
-        result = test_condition(str(condition) + ": " + str(field))
-        print(f'Condition: {condition}: {field}\n{result}')
+    response = test_a_doc(path)
+    print(json.dumps(response, indent=4))
