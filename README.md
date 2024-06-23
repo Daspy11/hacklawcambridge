@@ -14,14 +14,9 @@ The frontend code can be found in the `frontend2` folder. **Please disregard fro
 ## Includes
 
 - [React](https://github.com/facebook/react) - JavaScript library for building user interfaces
-- [Material-UI](https://github.com/mui-org/material-ui) - React components for faster and simpler web development
 - [Flask](https://github.com/pallets/flask) - lightweight WSGI web application framework
-- [Jinja](https://github.com/pallets/jinja) + [Bootstrap](https://pythonhosted.org/Flask-Bootstrap) (from CDN)
-- [uWSGI](https://github.com/unbit/uwsgi) - entrypoint
-- [Celery](https://github.com/celery/celery) (with example heartbeat task configured) - distributed task queue
-- [Flask-SQLAlchemy](https://github.com/pallets/flask-sqlalchemy) - ORM toolkit
-- [LocalStack](https://github.com/localstack/localstack) - fully functional local AWS cloud stack
-- [Pandas](https://pandas.pydata.org/) - fully functional local AWS cloud stack
+- [ShadCN](https://ui.shadcn.com) - component library
+- [Pandas](https://pandas.pydata.org/) - Library for manipulating tabular data
 
 ## Dependencies
 
