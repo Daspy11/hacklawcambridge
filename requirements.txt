@@ -1,0 +1,4 @@
+aiofiles
+boto3
+python-docx
+pandas
