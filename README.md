@@ -10,7 +10,6 @@ Method `test_a_doc` combines the two to collect all the information about the up
 
 The frontend code can be found in the `frontend2` folder. **Please disregard frontend folder, it contains disregarded code.**
 
-
 ## Includes
 
 - [React](https://github.com/facebook/react) - JavaScript library for building user interfaces

@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import extractor
+from src import extractor
 
 app = Flask(__name__)
 
@@ -7,9 +7,7 @@ app = Flask(__name__)
 def my_method(file):
     return extractor.test_a_doc(file.filename)
 
-
-@app.route('/process-file/', methods=['POST'])
-def process_file():
+def process_file(request):
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
 

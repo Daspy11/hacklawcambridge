@@ -1,14 +1,16 @@
-import { Link } from "react-router-dom"
-import { Input } from "@/components/ui/input"
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 import axios from "axios";
 
 export default function Component() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileUpload = (e) => {
     setFile(e.target.files[0]);
@@ -20,9 +22,10 @@ export default function Component() {
 
     const formData = new FormData();
     formData.append("file", file);
+    setIsLoading(true);
 
     try {
-      const response = await axios.post("https://your-api-endpoint.com/upload", formData, {
+      const response = await axios.post("http://localhost:8080/process-file/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -30,9 +33,12 @@ export default function Component() {
       console.log("File uploaded successfully:", response.data);
     } catch (error) {
       console.error("Error uploading file:", error);
+    } finally {
+      setIsLoading(false);
+      setIsModalOpen(false);
+      setFile(null);
+      navigate("/details/3209/");
     }
-
-    setIsModalOpen(false);
   };
 
   const handleCloseModal = () => {
@@ -82,8 +88,8 @@ export default function Component() {
                 {file && (
                   <div className="mt-2 flex items-center justify-between">
                     <span className="text-sm">{file.name}</span>
-                    <Button variant="outline" size="xs" onClick={handleFileUploadSubmit}>
-                      Upload
+                    <Button variant="outline" size="xs" className="px-4" onClick={handleFileUploadSubmit} disabled={isLoading}>
+                      {isLoading ? "Uploading..." : "Upload"}
                     </Button>
                   </div>
                 )}
