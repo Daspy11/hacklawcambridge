@@ -1,16 +1,26 @@
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import JSONResponse
+from flask import Flask, request, jsonify
 import extractor
 
-app = FastAPI()
+app = Flask(__name__)
 
 
-async def check_file(in_file: UploadFile):
-    # Process the file and return the result
-    return extractor.test_a_doc(in_file.filename)
+def my_method(file):
+    return extractor.test_a_doc(file.filename)
 
 
-@app.post("/process-file/")
-async def process_file(file: UploadFile = File(...)):
-    result = check_file(file)
-    return JSONResponse(content=result)
+@app.route('/process-file/', methods=['POST'])
+def process_file():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    result = my_method(file)
+    return jsonify(result)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
