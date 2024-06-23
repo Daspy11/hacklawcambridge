@@ -115,6 +115,7 @@ def test_condition(condition):
 
 
 if __name__ == "__main__":
+    # For testing purposes
     path = 'contract.docx'
     conditions = get_conditions(path)
     for condition, field in conditions.items():
