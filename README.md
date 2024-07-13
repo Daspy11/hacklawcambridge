@@ -1,4 +1,6 @@
-# Nasir.AI web app
+# Nasir.AI - 2nd Place
+
+This is the repo for team Nasir.AI who took 2nd place at Cambridge Hack The Law 2024. Everything here was built in a few hours ahead of our demo.
 
 The code that checks your file for conditions and checks your database for contract breaches.
 
